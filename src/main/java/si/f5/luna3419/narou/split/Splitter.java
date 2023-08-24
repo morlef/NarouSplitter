@@ -108,17 +108,15 @@ public class Splitter {
 
         String title = "";
         for (int count = 1;; count++) {
+            if (lines.get(line).startsWith("【第")) {
+                data.getChapterData().add(count + "~ " + lines.get(line + 1));
+                line += 3;
+            }
+            if (lines.get(line).equals("【サブタイトル】")) {
+                title = String.format("%-4d", count) + " - " +lines.get(line + 1);
+                line += 3;
+            }
             for (; !(lines.get(line).startsWith(splitter) || lines.get(line).equals("【免責事項】")); line++) {
-                if (lines.get(line).startsWith("【第")) {
-                    data.getChapterData().add(count + "~ " + lines.get(line + 1));
-                    line += 2;
-                    continue;
-                }
-                if (lines.get(line).equals("【サブタイトル】")) {
-                    title = String.format("%-4d", count) + " - " +lines.get(line + 1);
-                    line += 2;
-                    continue;
-                }
                 if (lines.get(line).startsWith("【投稿者情報】")) {
                     if (lines.get(line + 2).contains(":")) {
                         title = String.format("%-3s", count) + " - " + lines.get(line + 2).split(" ")[1];
